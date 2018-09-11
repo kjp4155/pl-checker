@@ -10,7 +10,11 @@ module TestEx3: TestEx =
     let testcases: testcase list =
       [ PARENIZE ((NODE(NODE(LEAF Korea, LEAF Portugal), LEAF Brazil)),
         "(NODE(NODE(LEAF Korea, LEAF Portugal), LEAF Brazil))",
-        "((Korea Portugal) Brazil)"); 
+        "((Korea Portugal) Brazil)");
+       PARENIZE ((NODE(LEAF Korea, LEAF Portugal)),
+        "NODE(LEAF Korea, LEAF Portugal)",
+        "(Korea Portugal)");
+
       ]
 
     let runner (tc: testcase): bool =
