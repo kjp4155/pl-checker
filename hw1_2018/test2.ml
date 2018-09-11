@@ -17,6 +17,12 @@ module TestEx2: TestEx =
       ; SUMPROD ((fun (x,y) -> float_of_int x *. float_of_int y), 5, 1, "(x,y) -> x*y", 15.0)
       ; SUMPROD ((fun (x,y) -> (float_of_int x *. float_of_int x) +. (float_of_int y *. float_of_int y))
         , 3, 5, "(x,y) -> x*x + y*y", 2334800.0)
+      ; SUMPROD ((fun (x,y) -> (float_of_int x *. float_of_int x) -. (float_of_int y *. float_of_int y))
+        , 3, 5, "(x,y) -> x*x - y*y", 0.0)
+      ; SUMPROD ((fun (x,y) -> (float_of_int x *. float_of_int x) *. (float_of_int y *. float_of_int y))
+        , 3, 5, "(x,y) -> x*x * y*y", 865065600.0)
+      ; SUMPROD ((fun (x,y) -> (float_of_int x *. float_of_int x) -. float_of_int y)
+        , 8, 8, "(x,y) -> x*x - y", 172348703573760.0)
       ;
       ]
 
