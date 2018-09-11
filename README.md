@@ -26,7 +26,7 @@ git pull --rebase origin master
 ```
 
 # 2018 Update status
-- HW 1-1, 1-2, 1-3: Basic tests
+- HW1: Basic tests
 
 # Status
 - HW 7-1 : TA testcases
