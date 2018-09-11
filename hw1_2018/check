@@ -1,6 +1,6 @@
 #!/bin/bash
 HWNUM=1
-EXERCISES=(1 2 3 4)
+EXERCISES=(1 2 3 4 5)
 LIB_PATH="../lib/"
 LIBSRC="testlib.ml"
 
