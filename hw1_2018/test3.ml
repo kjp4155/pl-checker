@@ -38,6 +38,9 @@ module TestEx3: TestEx =
         PARENIZE(( NODE(LEAF Usa, NODE(LEAF Norway, NODE(LEAF England, NODE(LEAF Italy, NODE(LEAF Nigeria, NODE(LEAF Argentina, NODE(LEAF Korea, NODE(LEAF Brazil, NODE(LEAF Sweden, NODE(LEAF Portugal, NODE(LEAF Germany, NODE(LEAF Japan, NODE(LEAF France, NODE(LEAF Poland, LEAF Cameroon)))))))))))))) ),
           "NODE(LEAF Usa, NODE(LEAF Norway, NODE(LEAF England, NODE(LEAF Italy, NODE(LEAF Nigeria, NODE(LEAF Argentina, NODE(LEAF Korea, NODE(LEAF Brazil, NODE(LEAF Sweden, NODE(LEAF Portugal, NODE(LEAF Germany, NODE(LEAF Japan, NODE(LEAF France, NODE(LEAF Poland, LEAF Cameroon))))))))))))))",
           "(Usa (Norway (England (Italy (Nigeria (Argentina (Korea (Brazil (Sweden (Portugal (Germany (Japan (France (Poland Cameroon))))))))))))))");
+        PARENIZE(( NODE(LEAF Norway, NODE(NODE(LEAF Cameroon, LEAF Poland), LEAF Sweden))),
+          "NODE(LEAF Norway, NODE(NODE(LEAF Cameroon, LEAF Poland), LEAF Sweden))",
+          "(Norway ((Cameroon Poland) Sweden))");
       ]
 
     let runner (tc: testcase): bool =
