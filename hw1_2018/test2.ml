@@ -23,7 +23,7 @@ module TestEx2: TestEx =
         , 3, 5, "(x,y) -> x*x * y*y", 865065600.0)
       ; SUMPROD ((fun (x,y) -> (float_of_int x *. float_of_int x) -. float_of_int y)
         , 8, 8, "(x,y) -> x*x - y", 172348703573760.0)
-      ;
+      ; SUMPROD ((fun (i, j) -> ((float_of_int i) *. 10.) +. (float_of_int j)), 2, 7, "TA Example", 4573689120.0)
       ]
 
     let runner (tc: testcase): bool =
