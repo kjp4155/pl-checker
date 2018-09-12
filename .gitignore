@@ -7,3 +7,4 @@ ex*.ml
 *.swp
 *.out
 hw8
+.DS_Store
