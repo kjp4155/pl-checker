@@ -48,6 +48,7 @@ module TestEx4: TestEx =
       ; EVAL (LESS (MINUS (NUM 3, NUM 5), MINUS (NUM 1, NUM 2)), true)
       ; EVAL (ORELSE (LESS (PLUS (MINUS (NUM 3, NUM 2), NUM 9), NUM 10), FALSE), false)
       ; EVAL (IMPLY (LESS (NUM 1, NUM 0), ANDALSO (TRUE, ORELSE (NOT TRUE, LESS (NUM 2, NUM 1)))), true)
+      ; EVAL (LESS (PLUS(NUM 3, NUM 4), MINUS(NUM 7, NUM 8)), false)
       ]
 
     let rec string_of_expr e =
