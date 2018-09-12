@@ -6,75 +6,38 @@ open Printf
 module TestEx1: TestEx =
   struct
     type testcase =
-      | EVAL of formula * bool
+      | CALCULATE of exp * string * float
 
     let testcases =
-      [ EVAL (TRUE, true)
-      ; EVAL (FALSE, false)
-      ; EVAL (NOT TRUE, false)
-      ; EVAL (NOT FALSE, true)
-      ; EVAL (ANDALSO (TRUE, TRUE), true)
-      ; EVAL (ANDALSO (TRUE, FALSE), false)
-      ; EVAL (ANDALSO (FALSE, TRUE), false)
-      ; EVAL (ANDALSO (FALSE, FALSE), false)
-      ; EVAL (ORELSE (TRUE, TRUE), true)
-      ; EVAL (ORELSE (TRUE, FALSE), true)
-      ; EVAL (ORELSE (FALSE, TRUE), true)
-      ; EVAL (ORELSE (FALSE, FALSE), false)
-      ; EVAL (IMPLY (TRUE, TRUE), true)
-      ; EVAL (IMPLY (TRUE, FALSE), false)
-      ; EVAL (IMPLY (FALSE, TRUE), true)
-      ; EVAL (IMPLY (FALSE, FALSE), true)
-      ; EVAL (LESS (NUM 1, NUM 2), true)
-      ; EVAL (LESS (NUM 2, NUM 1), false)
-      ; EVAL (LESS (NUM (-100), NUM (-200)), false)
-      ; EVAL (LESS (NUM (-200), NUM (-100)), true)
-      ; EVAL (LESS (NUM (-10000), NUM 10000), true)
-      ; EVAL (LESS (NUM 10000, NUM (-10000)), false)
-      ; EVAL (LESS (PLUS (NUM 1, NUM 2), NUM 3), false)
-      ; EVAL (LESS (PLUS (NUM 1, NUM 2), NUM 4), true)
-      ; EVAL (LESS (MINUS (NUM 10, NUM 5), NUM 5), false)
-      ; EVAL (LESS (MINUS (NUM 10, NUM 5), NUM 6), true)
-      ; EVAL (LESS (PLUS (NUM (-12345), NUM 23456), NUM 11111), false)
-      ; EVAL (LESS (PLUS (NUM (-12345), NUM 23456), NUM 11112), true)
-      ; EVAL (LESS (MINUS (NUM 12345, NUM 23456), NUM (-11111)), false)
-      ; EVAL (LESS (MINUS (NUM 12345, NUM 23456), NUM (-11110)), true)
-      ; EVAL (LESS (PLUS (NUM 3, NUM 4), MINUS (NUM 5, NUM 1)), false)
-      ; EVAL (LESS (PLUS (NUM 10, NUM 12), MINUS (NUM 10, NUM (-13))), true)
-      ; EVAL (NOT (ORELSE (IMPLY(TRUE, ANDALSO (TRUE, TRUE)), ANDALSO (TRUE, ANDALSO (TRUE, TRUE)))), false)
-      ; EVAL (ORELSE (IMPLY(LESS (NUM (-10), NUM (-100)), ANDALSO (NOT TRUE, TRUE)), ANDALSO (TRUE, ANDALSO (LESS (NUM 10, PLUS (MINUS (NUM 10, NUM (-10)), NUM 30)), TRUE))), true)
-      ; EVAL (ANDALSO (ORELSE (TRUE, FALSE), NOT (IMPLY (TRUE, FALSE))), true)
-      ; EVAL (LESS (PLUS (NUM 3, NUM 5), PLUS (NUM 1, NUM 2)), false)
-      ; EVAL (LESS (MINUS (NUM 3, NUM 5), MINUS (NUM 1, NUM 2)), true)
-      ; EVAL (ORELSE (LESS (PLUS (MINUS (NUM 3, NUM 2), NUM 9), NUM 10), FALSE), false)
-      ; EVAL (IMPLY (LESS (NUM 1, NUM 0), ANDALSO (TRUE, ORELSE (NOT TRUE, LESS (NUM 2, NUM 1)))), true)
+      [ 
+        CALCULATE(
+          SIGMA(INT 1, INT 10, SUB(MUL(X, X), INT 1)),
+          "SIGMA(INT 1, INT 10, SUB(MUL(X, X), INT 1))",
+          375.0
+        );
+        CALCULATE(
+          INTEGRAL(REAL 1.0, REAL 10.0, SUB(MUL(X, X), INT 1)),
+          "INTEGRAL(REAL 1.0, REAL 10.0, SUB(MUL(X, X), INT 1))",
+          319.065
+        );
+        CALCULATE(
+          INTEGRAL(REAL 1.0, REAL 0.0, SUB(MUL(X, X), INT 0)),
+          "INTEGRAL(REAL 1.0, REAL 10.0, SUB(MUL(X, X), INT 1))",
+          -0.285
+        );
       ]
-
-    let rec string_of_expr e =
-      match e with
-      | NUM n ->
-          if n < 0 then "(" ^ (string_of_int n) ^ ")"
-          else string_of_int n
-      | PLUS (e1, e2) -> sprintf "(%s + %s)" (string_of_expr e1) (string_of_expr e2)
-      | MINUS (e1, e2) -> sprintf "(%s - %s)" (string_of_expr e1) (string_of_expr e2)
-
-    let rec string_of_fomula f =
-      match f with
-      | TRUE -> "T"
-      | FALSE -> "F"
-      | NOT f' -> sprintf "(not %s)" (string_of_fomula f')
-      | ANDALSO (f1, f2) -> sprintf "(%s && %s)" (string_of_fomula f1) (string_of_fomula f2)
-      | ORELSE (f1, f2) -> sprintf "(%s || %s)" (string_of_fomula f1) (string_of_fomula f2)
-      | IMPLY (f1, f2) -> sprintf "(%s -> %s)" (string_of_fomula f1) (string_of_fomula f2)
-      | LESS (e1, e2) -> sprintf "(%s < %s)" (string_of_expr e1) (string_of_expr e2)
 
     let runner tc =
       match tc with
-      | EVAL (f, ans) -> eval f = ans
+      | CALCULATE (f, fs, ans) -> abs_float ((calculate f) -. ans) < 0.00000001
 
     let string_of_tc tc =
       match tc with
-      | EVAL (f, ans) -> (string_of_fomula f, string_of_bool ans, string_of_bool (eval f))
+      | CALCULATE (f, fs, ans) -> 
+          ( fs  
+          , Printf.sprintf "%.10f" ans
+          , Printf.sprintf "%.10f" (calculate f)
+          )
   end
 
 open TestEx1

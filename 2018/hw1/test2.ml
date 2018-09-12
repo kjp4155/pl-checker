@@ -28,7 +28,7 @@ module TestEx2: TestEx =
 
     let runner (tc: testcase): bool =
       match tc with
-      | SUMPROD (f, n, k, fs, ans) -> sumprod(f,n,k) = ans
+      | SUMPROD (f, n, k, fs, ans) -> abs_float (sumprod(f,n,k) -. ans) < 0.0000001
 
     let string_of_tc (tc: testcase): string * string * string =
       match tc with
