@@ -1,6 +1,6 @@
 # Notice
 - HW1 테스트 업데이트가 완료되었습니다. (TA 예제 포함)
-- HW2 - 1,2,4 체커를 제작했습니다. 테스트 케이스는 수시로 업데이트할 예정입니다.
+- HW2 체커가 완성되었습니다! 아직은 데이터가 약합니다. 제출기한 전까지 수시로 보충할 예정입니다.
 - 2017, 2018과제를 구분하도록 디렉토리 구조를 수정했습니다.
 
 # pl-checker
@@ -27,10 +27,11 @@ cd ./2018/hw<num>
 ```bash
 git pull --rebase origin master
 ```
-
+<!--
 # Status
 - HW 7-1 : TA testcases
 - HW 7-2, 7-3 : TBD
+-->
 
 # Thanks to
 - [Jhuni](https://github.com/Jhuni0123)
