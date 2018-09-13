@@ -25,6 +25,51 @@ module TestEx1: TestEx =
           "INTEGRAL(REAL 1.0, REAL 10.0, SUB(MUL(X, X), INT 1))",
           -0.285
         );
+        (* Nested SIGMA *)
+        CALCULATE(
+          SIGMA(REAL 1.0, REAL 5.0, MUL(X, SIGMA(REAL 1.0, REAL 3.0, X)) ),
+          "SIGMA(REAL 1.0, REAL 5.0, MUL(X, SIGMA(REAL 1.0, REAL 3.0, X)) )",
+          90.0
+        );
+        (* Nested INTEGRAL & flipped INTEGRAL *)
+        CALCULATE(
+          INTEGRAL(REAL 2.05, REAL 1.0, MUL( MUL(X,X), INTEGRAL(REAL 0.0, REAL 1.05, X)) ),
+          "INTEGRAL(REAL 2.05, REAL 1.0, MUL( MUL(X,X), INTEGRAL(REAL 0.0, REAL 1.05, X)) )",
+          -0.98325
+        );
+        (* SOME ZERO SIGMA *)
+        CALCULATE(
+          SIGMA(REAL 100.0, REAL 5.0, MUL(X, SIGMA(REAL 1.0, REAL 3.0, X)) ),
+          "SIGMA(REAL 1.0, REAL 5.0, MUL(X, SIGMA(REAL 1.0, REAL 3.0, X)) )",
+          0.0
+        );
+        CALCULATE(
+          SIGMA(REAL 1.0, REAL 5.0, MUL(X, SIGMA(REAL 4.0, REAL 3.0, X)) ),
+          "SIGMA(REAL 1.0, REAL 5.0, MUL(X, SIGMA(REAL 1.0, REAL 3.0, X)) )",
+          0.0
+        );
+        CALCULATE(
+          SIGMA(REAL 5.0, REAL 1.0, MUL(X, X)),
+          "SIGMA(REAL 1.0, REAL 5.0, MUL(X, SIGMA(REAL 1.0, REAL 3.0, X)) )",
+          0.0
+        );
+        (* SOME SIGMA *)
+        CALCULATE(
+          SIGMA(REAL 1.0, REAL 3.0, MUL(X, MUL(X,X))),
+          "SIGMA(REAL 1.0, REAL 3.0, MUL(X, MUL(X,X))",
+          36.0
+        );
+        CALCULATE(
+          SIGMA(REAL 1.0, SIGMA(REAL 1.0, REAL 3.0, X) , SUB(X, MUL(X,X))),
+          "SIGMA(REAL 1.0, SIGMA(REAL 1.0, REAL 3.0, X) , SUB(X, MUL(X,X)))",
+          -70.0
+        );
+        CALCULATE(
+          SIGMA(SIGMA(REAL 3.0, REAL 100.0, SUB(X,X)), SIGMA(REAL 1.0, REAL 3.0, X) , SUB(X, MUL(X,X))),
+          "SIGMA(SIGMA(REAL 3.0, REAL 100.0, SUB(X,X)), SIGMA(REAL 1.0, REAL 3.0, X) , SUB(X, MUL(X,X)))",
+          -70.0
+        );
+        
       ]
 
     let runner tc =
