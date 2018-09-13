@@ -1,7 +1,7 @@
 # Notice
-- HW1 테스트 업데이트가 완료되었습니다 (TA 예제 포함)
-- 2017, 2018과제를 구분하도록 디렉토리 구조를 수정했습니다
-- HW2 테스트는 9월 16일까지 업데이트 해볼게요
+- HW1 테스트 업데이트가 완료되었습니다. (TA 예제 포함)
+- HW2 - 1,2,4 체커를 제작했습니다. 테스트 케이스는 수시로 업데이트할 예정입니다.
+- 2017, 2018과제를 구분하도록 디렉토리 구조를 수정했습니다.
 
 # pl-checker
 2018년 가을학기 Programming Language 숙제 자동 채점기 <br>
@@ -15,7 +15,7 @@ unix 기반 환경을 필요로 합니다
 ```bash
 git clone https://github.com/kjp4155/pl-checker
 cd pl-checker
-cd hw<num>_2018
+cd ./2018/hw<num>
 # please read README.md
 ./check
 ```
@@ -28,21 +28,15 @@ cd hw<num>_2018
 git pull --rebase origin master
 ```
 
-# 2018 Update status
-- HW1: Basic tests
-
 # Status
 - HW 7-1 : TA testcases
 - HW 7-2, 7-3 : TBD
 
 # Thanks to
+- [Jhuni](https://github.com/Jhuni0123)
 - [kipa00](https://github.com/kipa00)
 - All students sharing testcases
 - All TAs in PL lecture
-
-# Screenshot
-### 2-5: Zip-Zip Tree
-![2-5](img/PL_2-5.png)
 
 ---
 [MIT License](LICENSE)
