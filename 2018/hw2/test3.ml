@@ -1,180 +1,93 @@
-(* Exercise 6. IntListQ *)
-open Ex6
+(* Exercise 3. leftist heap *)
+open Ex3
 open Testlib
 
-open IntListQ
-
-module ValidIntListQ = (IntListQ: Queue)
-
-module TestEx6: TestEx =
+module TestEx3: TestEx =
   struct
     type testcase =
       | SEQ of seq list
     and seq =
-      | ENQ of int list
-      | DEQ of int list
-      | DEQ_EMPTYQ
+      | INSERT of int
+      | FINDMIN of int
+      | FINDMIN_EMPTY
+      | DELETEMIN
+      | DELETEMIN_EMPTY
 
     let testcases =
-      [ SEQ
-        [ ENQ [1;2;3]
-        ; DEQ [1;2;3]
-        ]
-      ; SEQ
-        [ DEQ_EMPTYQ ]
-      ; SEQ
-        [ ENQ [1]
-        ; DEQ [1]
-        ; DEQ_EMPTYQ
-        ]
-      ; SEQ
-        [ ENQ [3;2;1]
-        ; ENQ [4;5;6]
-        ; DEQ [3;2;1]
-        ; ENQ [9;8;7;6]
-        ; DEQ [4;5;6]
-        ; DEQ [9;8;7;6]
-        ; DEQ_EMPTYQ
-        ]
-      ; SEQ
-        [ ENQ [3;2;1]
-        ; ENQ [-1;-2;-3]
-        ; DEQ [3;2;1]
-        ; DEQ [-1;-2;-3]
-        ; DEQ_EMPTYQ
-        ]
-      ; SEQ
-        [ ENQ []
-        ; ENQ [1;2;3]
-        ; ENQ [4;5;6]
-        ; ENQ [1;2;3]
-        ; DEQ []
-        ; DEQ [1;2;3]
-        ; ENQ [1]
-        ; ENQ [-10;1;-9]
-        ; DEQ [4;5;6]
-        ; DEQ [1;2;3]
-        ; DEQ [1]
-        ; DEQ [-10;1;-9]
-        ; ENQ [222;333]
-        ; DEQ [222;333]
-        ; DEQ_EMPTYQ
-        ]
-      ; SEQ
-        [ ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; DEQ_EMPTYQ
-        ]
-      ; SEQ
-        [ ENQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; ENQ [1;2;3;4;5]
-        ; DEQ [1;2;3;4;5]
-        ; DEQ_EMPTYQ
-        ]
-      ; SEQ
-        [ ENQ [1]
-        ; DEQ [1]
-        ]
-      ; SEQ
-        [ ENQ [1]
-        ; ENQ [2]
-        ; DEQ [1]
-        ; DEQ [2]
-        ]
-      ; SEQ
-        [ ENQ [1]
-        ; ENQ [2]
-        ; DEQ [1]
-        ; ENQ [3]
-        ; ENQ [4]
-        ; DEQ [2]
-        ; DEQ [3]
-        ]
-      ; SEQ
-        [ ENQ [1]
-        ; DEQ [1]
-        ; ENQ [2]
-        ; ENQ [3]
-        ; DEQ [2]
-        ; ENQ [4]
-        ; DEQ [3]
-        ; DEQ [4]
-        ]
+      [ 
+        SEQ [INSERT 1;  INSERT 2; FINDMIN 1; DELETEMIN; FINDMIN 2;];
+        SEQ [ DELETEMIN_EMPTY; ];
+        SEQ [ FINDMIN_EMPTY; ];
+        SEQ [INSERT 1;  INSERT 2; FINDMIN 1; DELETEMIN; FINDMIN 2; DELETEMIN; FINDMIN_EMPTY; DELETEMIN_EMPTY; ];
+        SEQ [INSERT 1; INSERT 1; INSERT 1; FINDMIN 1; DELETEMIN; FINDMIN 1; DELETEMIN; FINDMIN 1; DELETEMIN; FINDMIN_EMPTY; ]
       ]
 
     let runner tc =
-      let rec runner_ l q =
+      let rec runner_ : (seq list) * heap -> bool = fun (l,h) ->
         match l with
         | [] -> true
-        | (h::tc') ->
-            match h with
-            | ENQ l -> runner_ tc' (enQ (q, l))
-            | DEQ l ->
-                let (l', q') = deQ q in
-                if l' = l then runner_ tc' q'
+        | (head::tc') -> begin
+            match head with
+            | INSERT x -> runner_ (tc', insert (x,h))
+            | FINDMIN x ->
+                let y = findMin h in
+                if x = y then runner_ (tc', h)
                 else false
-            | DEQ_EMPTYQ ->
-                let res =
-                  try Some (deQ q)
-                  with EMPTY_Q -> None
-                in res = None
+            | FINDMIN_EMPTY ->
+                let _ = try Some (findMin h) with EmptyHeap -> None in
+                true
+            | DELETEMIN -> runner_ (tc', deleteMin h)
+            | DELETEMIN_EMPTY ->
+                let _ = try Some (deleteMin h) with EmptyHeap -> None in
+                true
+        end
       in
       match tc with
-      | SEQ l -> runner_ l emptyQ
+      | SEQ l -> runner_ (l,EMPTY)
 
     let string_of_tc tc =
-      let rec string_of_seqs seqs q =
+      let rec string_of_seqs : (seq list) * heap -> (string*string*string) = fun (seqs,h) ->
         match seqs with
         | [] -> ("", "", "")
-        | (h::seqs') ->
-            let string_of_int_list = string_of_list string_of_int in
-            match h with
-            | ENQ l ->
-                let (s, ans, out) = string_of_seqs seqs' (enQ (q, l)) in
-                ("\n  enQ (q, " ^ (string_of_int_list l) ^ ")" ^ s, ans, out)
-            | DEQ l ->
-                let (l', q') = deQ q in
-                if l' = l then
-                  let (s, ans, out) = string_of_seqs seqs' q' in
-                  ("\n  " ^ correct_symbol ^ " deQ (q) = " ^ (string_of_int_list l) ^ s, ans, out)
-                else ("\n  " ^ wrong_symbol ^ " deQ (q)", string_of_int_list l, string_of_int_list l')
-            | DEQ_EMPTYQ ->
-                let res =
-                  try Some (deQ q)
-                  with EMPTY_Q -> None
-                in match res with
-                | Some (l', q') -> ("\n  " ^ wrong_symbol ^ " deQ (q)", "Exception EMPTY_Q", string_of_int_list l')
-                | None ->
-                    let (s, ans, out) = string_of_seqs seqs' q
-                    in ("\n  " ^ correct_symbol ^ " deQ (q) = Exception EMPTY_Q" ^ s, ans, out)
+        | (head::seqs') ->
+            match head with
+            | INSERT x -> begin
+                let (s, ans, out) = string_of_seqs (seqs',insert (x, h)) in
+                ("\n  insert " ^ (string_of_int x)  ^ s, ans, out)
+            end
 
+            | FINDMIN x -> begin
+                let y = findMin h in
+                let (s,ans,out) = string_of_seqs (seqs',h) in
+                if x = y then
+                  ("\n  findMin: Expected " ^ string_of_int x ^ ", Your output " ^ string_of_int y ^ s, ans, out)
+                else
+                  ("\n  " ^ wrong_symbol ^ "findMin: Expected " ^ string_of_int x ^ ", Your output " ^ string_of_int y ^ s, ans, out)
+            end
+            
+            | FINDMIN_EMPTY -> begin
+                let res = try Some (findMin h) with EmptyHeap -> None in
+                match res with
+                | Some (y) -> ("\n  " ^ wrong_symbol ^ " findMin", "Exception EmptyHeap", string_of_int y)
+                | None ->
+                    let (s, ans, out) = string_of_seqs (seqs',h)
+                    in ("\n  " ^ correct_symbol ^ "findMin = Exception EmptyHeap" ^ s, ans, out)
+            end
+
+            | DELETEMIN ->
+                let (s, ans, out) = string_of_seqs (seqs',deleteMin (h)) in
+                ("\n  deleteMin()" ^ s, ans, out)
+            | DELETEMIN_EMPTY ->
+                let res = try Some (deleteMin h) with EmptyHeap -> None in
+                match res with
+                | Some (y) -> ("\n  " ^ wrong_symbol ^ " deleteMin ", "Exception EmptyHeap", "Non-empty heap")
+                | None ->
+                    let (s, ans, out) = string_of_seqs (seqs',h)
+                    in ("\n  " ^ correct_symbol ^ "deleteMin = Exception EmptyHeap" ^ s, ans, out)
       in
       match tc with
-      | SEQ seqs -> string_of_seqs seqs emptyQ
+      | SEQ seqs -> string_of_seqs (seqs,EMPTY)
   end
 
-open TestEx6
+open TestEx3
 let _ = wrapper testcases runner string_of_tc
