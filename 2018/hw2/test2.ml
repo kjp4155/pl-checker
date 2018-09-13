@@ -153,6 +153,12 @@ module TestEx2: TestEx =
         DIFF ( POWER ("x",5), "x", TIMES[CONST 5; POWER("x",4)] );
         DIFF ( POWER ("x",0), "x", TIMES[CONST 0; POWER("x",-1)] );
         DIFF ( POWER ("x",-1), "x", TIMES[CONST (-1); POWER("x",-2)] );
+        DIFF ( SUM[CONST 1; VAR "x"; VAR "y"; VAR "z"], "x", CONST 1);
+        DIFF ( SUM[CONST 1; VAR "x"; VAR "y"; VAR "z"], "y", CONST 1);
+        DIFF ( SUM[CONST 1; VAR "x"; VAR "y"; VAR "z"], "z", CONST 1);
+        DIFF ( SUM[CONST 1; VAR "x"; VAR "y"; VAR "z"], "asdf", CONST 0);
+        DIFF ( TIMES[CONST 5; CONST 6; VAR "x"], "x", CONST 30);
+        DIFF ( TIMES[CONST 5; CONST 6; VAR "y"; VAR "x"], "x", TIMES[CONST 30; VAR "y"]);
         DIFF (
           SUM [ TIMES [VAR "x"; VAR "y"; ]; TIMES [VAR "y"; POWER ("x", 6) ] ],
           "y",
@@ -162,6 +168,11 @@ module TestEx2: TestEx =
           SUM [ TIMES [VAR "x"; VAR "y"; ]; TIMES [VAR "y"; POWER ("x", 6) ] ],
           "x",
           SUM [ VAR "y"; TIMES[CONST 6; POWER("x",5); VAR "y"]]
+        );
+        DIFF (
+          SUM [ TIMES [VAR "x"; VAR "y"; ]; TIMES [VAR "y"; POWER ("x", 6) ] ],
+          "z",
+          CONST 0
         );
       ]
 
