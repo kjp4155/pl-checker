@@ -32,6 +32,7 @@ module TestEx5: TestEx =
       ; MUL (10,2,20)
       ; MUL (17,31,527)
       ; MUL (2,16,32)
+      ; MUL (4,3,12)
       ]
 
     let runner (tc: testcase): bool =
