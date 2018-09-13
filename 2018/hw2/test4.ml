@@ -1,12 +1,12 @@
 (* Exercise 6. IntListQ *)
-open Ex6
+open Ex4
 open Testlib
 
 open IntListQ
 
 module ValidIntListQ = (IntListQ: Queue)
 
-module TestEx6: TestEx =
+module TestEx4: TestEx =
   struct
     type testcase =
       | SEQ of seq list
@@ -176,5 +176,5 @@ module TestEx6: TestEx =
       | SEQ seqs -> string_of_seqs seqs emptyQ
   end
 
-open TestEx6
+open TestEx4
 let _ = wrapper testcases runner string_of_tc
