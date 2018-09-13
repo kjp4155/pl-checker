@@ -2,14 +2,17 @@
 open Ex2
 open Testlib
 
+(* Hash function for handling minus powers *)
 let hash : int * int -> int = fun(a,b) ->
   a * 37 + b * 1000000009
 
+(* Simple integer exponential *)
 let rec pow : int * int -> int = fun(a,b) ->
   if b < 0 then hash (a,b)
   else if b = 0 then 1
   else a * (pow (a,b-1))
 
+(* Simple list sort *)
 let rec sort = function
   | [] -> []
   | x :: l -> insert x (sort l)
@@ -21,11 +24,13 @@ and insert elem = function
 let rec print_list = function [] -> ()
   | e::l -> print_string (string_of_bool e) ; print_string " " ; print_list l
 
+(* Remove any duplicates in list. *)
 let rec remove_dups lst = 
   match lst with
   | [] -> []
   | h::t -> h::(remove_dups (List.filter (fun x -> x<>h) t))
 
+(* String representation of polynomial. Might be dirty. *)
 let rec string_of_ae : ae -> string = fun (f) ->
   match f with
   | CONST a -> string_of_int a
@@ -44,6 +49,10 @@ let rec string_of_ae : ae -> string = fun (f) ->
     | a :: b -> "(" ^ (string_of_ae a) ^ "+" ^ (string_of_ae (SUM b)) ^ ")"
   end
 
+(* 
+  Calculate value of ae which only contains CONST. 
+  Make sure to replace every VAR into CONST before using this.
+*)
 let rec calc : ae -> int = fun (f) -> 
   match f with
   | CONST a -> a
@@ -62,6 +71,9 @@ let rec calc : ae -> int = fun (f) ->
     | a :: b -> (calc a) + (calc (SUM b))
   end
 
+(*
+  Replace every specific VAR s into given CONST x.
+*)
 let rec replace : ae * string * int -> ae = fun (f,s,x) ->
   match f with
   | CONST a -> CONST a
@@ -80,7 +92,7 @@ let rec replace : ae * string * int -> ae = fun (f,s,x) ->
     | a :: b -> SUM [replace(a,s,x); replace(SUM b,s,x)]
   end
 
-
+(* Get list of every VAR exists in given ae *)
 let rec get_vallist : ae -> (string list) = fun (f) ->
   match f with
   | CONST a -> []
@@ -97,15 +109,13 @@ let rec get_vallist : ae -> (string list) = fun (f) ->
     | a :: b -> List.concat[get_vallist a; get_vallist (SUM b)]
   end
 
+(* Try [-5,5] for every VAR exists in given ae *)
 let rec backtrack : ae * ae * (string list) * int * int -> (bool list) = fun (f, g, l, cur, mx) ->
   if cur > mx then []
   else 
     match l with 
     | [] -> begin
-    (*  
-      let _ = print_endline (string_of_int (calc f)) in
-      let _ = print_endline (string_of_int (calc g)) in
-    *) 
+     
       if (calc f) = (calc g) then [true]
       else [false]
     end
@@ -115,6 +125,7 @@ let rec backtrack : ae * ae * (string list) * int * int -> (bool list) = fun (f,
       List.concat[ backtrack(f,g,l,cur+1,mx) ; backtrack(ff,gg,b,-5,mx) ]
     end
 
+(* Check if a list has only true in it *)
 let rec only_true : (bool list) -> bool = fun (lst) ->
   match lst with
   | [] -> true
@@ -123,6 +134,7 @@ let rec only_true : (bool list) -> bool = fun (lst) ->
     else only_true t
   end
 
+(* Check if two ae is equal by calculate and compare its value on many points *)
 let check_equal : ae * ae -> bool = fun (f,g) ->
   let fvars = (get_vallist f) in
   let gvars = (get_vallist g) in
