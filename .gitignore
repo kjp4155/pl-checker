@@ -9,3 +9,4 @@ ex*.ml
 .vscode
 hw8
 .DS_Store
+_check
