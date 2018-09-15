@@ -151,6 +151,12 @@ module TestEx2: TestEx =
 
     let testcases =
       [ 
+        (* TA testcase *)
+        DIFF ( 
+          SUM ([TIMES [CONST 5; TIMES([VAR "x";VAR "x"])]; CONST 1]),
+          "x",
+          TIMES[ CONST 10; VAR "x"]
+        );
         (* Some basic testcases *)
         DIFF ( VAR "x", "x", CONST 1 );
         DIFF ( VAR "x", "y", CONST 0 );

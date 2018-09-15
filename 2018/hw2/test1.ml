@@ -11,6 +11,17 @@ module TestEx1: TestEx =
 
     let testcases =
       [ 
+        (* TA Example *)
+        CALCULATE_EXCEPTION(
+          SIGMA(INT 1, ADD(X,X), X),
+          "SIGMA(INT 1, ADD(X,X), X)"
+        );
+        CALCULATE(
+          INTEGRAL(REAL 1.0, REAL (-5.0), X),
+          "INTEGRAL(REAL 1.0, REAL (-5.0), X)",
+          12.3
+        );
+        (* Some simple examples *)
         CALCULATE(
           SIGMA(INT 1, INT 10, SUB(MUL(X, X), INT 1)),
           "SIGMA(INT 1, INT 10, SUB(MUL(X, X), INT 1))",
@@ -77,6 +88,8 @@ module TestEx1: TestEx =
           0.0
         );
         (* SOME COMBINED SIGMA & INTEGRAL *)
+        (* TODO: Add some combined examples *)
+        
         (* FreeVariable EXCEPTIONS *)
         CALCULATE_EXCEPTION(
           INTEGRAL(X, REAL 100.05, SUB(MUL(X, X), INT 0)),
