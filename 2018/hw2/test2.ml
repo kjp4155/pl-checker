@@ -188,9 +188,14 @@ module TestEx2: TestEx =
           SUM [ VAR "y"; TIMES[CONST 6; POWER("x",5); VAR "y"]]
         );
         DIFF (
-          SUM [ TIMES [VAR "x"; VAR "y"; ]; TIMES [VAR "y"; POWER ("x", 6) ] ],
+          SUM[ TIMES [VAR "x"; VAR "y"; ]; TIMES[VAR "y"; POWER ("x", 6)] ],
           "z",
           CONST 0
+        );
+        DIFF (
+          TIMES [ SUM[VAR "x"; VAR "y"]; SUM[VAR "y"; VAR "z"]; SUM[VAR "z"; VAR "x"] ],
+          "x",
+          SUM[ TIMES[VAR "y"; VAR "y"]; POWER("z", 2); TIMES[CONST 2; SUM[TIMES[VAR "x"; VAR "y"]; TIMES[VAR "y"; VAR "z"]; TIMES[VAR "z"; VAR "x"] ] ] ]
         );
       ]
 
