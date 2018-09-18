@@ -2,6 +2,18 @@
 open Ex3
 open Testlib
 
+let value : heap -> int = fun (h) ->
+  match h with
+  | EMPTY -> -987654321
+  | NODE (_,v,_,_) -> v
+
+let rec check_structure : heap -> bool = fun (h) ->
+  match h with
+  | EMPTY -> true
+  | NODE (r,v,lh,rh) -> begin
+    (check_structure lh) && (check_structure rh) && (rank lh >= rank rh)
+  end
+
 module TestEx3: TestEx =
   struct
     type testcase =
@@ -31,6 +43,8 @@ module TestEx3: TestEx =
 
     let runner tc =
       let rec runner_ : (seq list) * heap -> bool = fun (l,h) ->
+        if (check_structure h) == false then false
+        else
         match l with
         | [] -> true
         | (head::tc') -> begin
@@ -50,10 +64,13 @@ module TestEx3: TestEx =
         end
       in
       match tc with
-      | SEQ l -> runner_ (l,EMPTY)
+      | SEQ l -> (runner_ (l,EMPTY))
 
     let string_of_tc tc =
       let rec string_of_seqs : (seq list) * heap -> (string*string*string) = fun (seqs,h) ->
+        if (check_structure h) == false then
+          ("", "", "Invalid leftist heap structure!" )
+        else
         match seqs with
         | [] -> ("", "", "")
         | (head::seqs') ->
