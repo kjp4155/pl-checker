@@ -148,6 +148,7 @@ module TestEx2: TestEx =
   struct
     type testcase =
       | DIFF of ae * string * ae
+      | DIFF_INVALID of ae * string
 
     let testcases =
       [ 
@@ -203,11 +204,18 @@ module TestEx2: TestEx =
           "y",
           TIMES[ CONST 15; SUM[VAR "x"; VAR "y"];SUM[VAR "x"; VAR "y"]]
         );
+        DIFF_INVALID( TIMES[] , "x");
+        DIFF_INVALID( SUM[] , "x");
+        DIFF_INVALID( TIMES[CONST 3; SUM[]] , "x");
+        DIFF_INVALID( SUM[ TIMES[VAR "x"; VAR "y"]; TIMES[] ], "x");
       ]
 
     let runner tc =
       match tc with
       | DIFF (f, var, ans) -> check_equal (diff (f,var), ans)
+      | DIFF_INVALID (f, var) -> 
+          try check_equal (diff (f,var), CONST 1) 
+          with InvalidArgument -> true
 
     let string_of_tc tc =
       match tc with
@@ -216,6 +224,11 @@ module TestEx2: TestEx =
         (string_of_ae ans) ^ "\n",
         (string_of_ae (diff (f,var) )) ^ "\n"
         )
+      | DIFF_INVALID (f,var) -> (
+        (string_of_ae f) ^ " diff by " ^ var,
+        ("Expected InvalidArgument Exception") ^ "\n",
+        (string_of_ae (diff (f,var) )) ^ "\n"
+      )
       
   end
 
