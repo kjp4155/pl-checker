@@ -69,7 +69,7 @@ module TestEx3: TestEx =
     let string_of_tc tc =
       let rec string_of_seqs : (seq list) * heap -> (string*string*string) = fun (seqs,h) ->
         if (check_structure h) == false then
-          ("", "", "Invalid leftist heap structure!" )
+          ("", "", "Invalid leftist heap structure! (right child's rank is greater than left)" )
         else
         match seqs with
         | [] -> ("", "", "")
