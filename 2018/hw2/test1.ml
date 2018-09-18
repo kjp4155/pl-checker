@@ -28,6 +28,11 @@ module TestEx1: TestEx =
           375.0
         );
         CALCULATE(
+          SIGMA(REAL 1.0, REAL 10.0, SUB(MUL(X, X), INT 1)),
+          "SIGMA(REAL 1, REAL 10, SUB(MUL(X, X), INT 1))",
+          375.0
+        );
+        CALCULATE(
           INTEGRAL(REAL 1.0, REAL 10.0, SUB(MUL(X, X), INT 1)),
           "INTEGRAL(REAL 1.0, REAL 10.0, SUB(MUL(X, X), INT 1))",
           319.065
@@ -88,6 +93,11 @@ module TestEx1: TestEx =
           0.0
         );
         (* SOME COMBINED SIGMA & INTEGRAL *)
+        CALCULATE(
+          INTEGRAL( SIGMA(INT 1, INT 1, MUL(X,X)) , SIGMA(INT 1, REAL 5.0, MUL(X,X)) , X),
+          "INTEGRAL(SIGMA(INT 1, INT 1, MUL(X,X)) , SIGMA(INT 1, REAL 5, MUL(X,X)) , X)",
+          1503.81
+        );
         (* TODO: Add some combined examples *)
         
         (* FreeVariable EXCEPTIONS *)

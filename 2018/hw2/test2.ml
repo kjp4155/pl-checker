@@ -162,6 +162,7 @@ module TestEx2: TestEx =
         DIFF ( VAR "x", "y", CONST 0 );
         DIFF ( VAR "x", "z", CONST 0 );
         DIFF ( VAR "wow", "wow", CONST 1 );
+        DIFF ( POWER("x",5), "x", TIMES[ CONST 5; POWER("x",4)] );
         DIFF ( VAR "wow", "fsdafsddfs", CONST 0 );
         DIFF ( TIMES[CONST 5; VAR "x"], "x", CONST 5 );
         DIFF ( TIMES[CONST 5; VAR "x"], "y", CONST 0 );
@@ -196,6 +197,11 @@ module TestEx2: TestEx =
           TIMES [ SUM[VAR "x"; VAR "y"]; SUM[VAR "y"; VAR "z"]; SUM[VAR "z"; VAR "x"] ],
           "x",
           SUM[ TIMES[VAR "y"; VAR "y"]; POWER("z", 2); TIMES[CONST 2; SUM[TIMES[VAR "x"; VAR "y"]; TIMES[VAR "y"; VAR "z"]; TIMES[VAR "z"; VAR "x"] ] ] ]
+        );
+        DIFF (
+          TIMES[CONST 5; SUM[VAR "x"; VAR "y"];SUM[VAR "x"; VAR "y"];SUM[VAR "x"; VAR "y"]],
+          "y",
+          TIMES[ CONST 15; SUM[VAR "x"; VAR "y"];SUM[VAR "x"; VAR "y"]]
         );
       ]
 
