@@ -1,0 +1,16 @@
+*.k-
+*.txt
+*.out
+*.myout
+!examples/*.k-
+!examples/*.ans
+!examples/*.in
+exercises/ex*.k-
+!exercises/test*.k-
+exercises/test*.tmp.k-
+!exercise/test*.ans
+k.ml
+run
+lexer.ml
+parser.ml
+parser.mli
