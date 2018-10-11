@@ -61,8 +61,8 @@ do
     eval "diff ${TFILE}.ans ${TFILE}.out > /dev/null"
     result $?
 done
-echo ''
 
+echo ''
 echo "# Testing Exercise 2"
 for TC in "${TC2[@]}"
 do
@@ -106,7 +106,7 @@ do
         SRC="${EXDIR}/ex3.k-"
     fi
 
-    sed -e "/2017/ r ${TFILE}.k-" -e "s/2017//" "${SRC}" > "${TFILE}.tmp.k-"
+    sed -e "/2018/ r ${TFILE}.k-" -e "s/2018//" "${SRC}" > "${TFILE}.tmp.k-"
 
     COMM="./run ${TFILE}.tmp.k- > ${TFILE}.out"
 
@@ -117,3 +117,4 @@ do
     eval "diff ${TFILE}.ans ${TFILE}.out > /dev/null"
     result $?
 done
+
