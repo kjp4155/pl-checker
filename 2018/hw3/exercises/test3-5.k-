@@ -1,0 +1,17 @@
+(* This is TA testcases *)
+
+let lf := leaf (2) in 
+write (nodeVal (lf));
+
+let tr := makeLtree (1, (leaf (2))) in 
+( 
+if isEmpty(rTree(tr)) then write (1) else write (0) 
+);
+
+let t1 := makeTree (1, leaf(2), leaf(3)) in 
+let t0 := makeTree (0, t1, leaf(4)) in 
+dft (t0);
+
+let t1 := makeTree (1, leaf(2), leaf(3)) in 
+let t0 := makeTree (0, t1, leaf(4)) in 
+bft (t0)

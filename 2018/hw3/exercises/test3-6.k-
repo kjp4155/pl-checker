@@ -1,0 +1,15 @@
+(
+
+
+let t := makeLtree (1, (leaf (2))) in 
+(
+if isEmpty(rTree(t)) then write (1) else write (0);
+if isEmpty(lTree(t)) then write (1) else write (0)
+);
+let t := makeRtree (1, (leaf (2))) in
+(
+if isEmpty(rTree(t)) then write (1) else write (0);
+if isEmpty(lTree(t)) then write (1) else write (0)
+)
+
+)
