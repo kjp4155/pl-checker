@@ -1,0 +1,66 @@
+#!/bin/bash
+
+TESTCASES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26)
+GC_TESTCASES=(1 2)
+TESTDIR="examples"
+WRONG="$(tput setaf 1)✗$(tput sgr0)"
+CORRECT="$(tput setaf 2)✓$(tput sgr0)"
+WARNING="$(tput setaf 3)⚠$(tput sgr0)"
+
+
+function result {
+    if [ 0 -lt "$1"  ]
+    then
+        echo "${WRONG}"
+    else
+        echo "${CORRECT}"
+    fi
+}
+
+echo '# Compiling...'
+if ! make
+then
+    echo ''
+    echo 'Compile fail.'
+    exit 1
+fi
+echo ''
+
+echo '# Testing SM5 translator'
+
+for TC in "${TESTCASES[@]}"
+do
+    TFILE="${TESTDIR}/test${TC}"
+    printf "Test %s..." "${TC}"
+    COMM="./run ${TFILE}.k-- > ${TFILE}.out"
+    COMMK="./run -k ${TFILE}.k-- > ${TFILE}.ans"
+    if [ -f "${TFILE}.in" ]
+    then
+        COMM="${COMM} < ${TFILE}.in"
+        COMMK="${COMMK} < ${TFILE}.in"
+    fi
+
+    eval "${COMMK}"
+
+    if eval "${COMM}"
+    then
+        eval "diff ${TFILE}.ans ${TFILE}.out > /dev/null"
+        result $?
+    else
+        echo "${WRONG}"
+    fi
+done
+
+
+echo ''
+echo '# Compiling gc test...'
+if ! ocamlc unix.cma -I ../lib/ ../lib/testlib.ml sm5.ml gc_test.ml -o gc
+then
+    echo ''
+    echo 'Compile fail.'
+    exit 1
+fi
+echo ''
+
+echo '# Testing SM5 Limited: gc'
+./gc
