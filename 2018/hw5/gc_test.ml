@@ -590,6 +590,53 @@ let testcases : testcase list =
     , (* Output *)
       [500]
     )
+
+  ; RUN (
+      [ MALLOC;
+        BIND "start";
+        PUSH (Id "start");
+        BIND "cur";
+      ]
+
+      |> append_n 125 (fun _ ->
+        [ MALLOC;
+          PUSH (Id "cur");
+          STORE;
+
+          PUSH (Id "cur");
+          LOAD;
+
+          UNBIND;
+          POP;
+
+          BIND "cur";
+        ]
+      )
+
+      |> append [PUSH (Id "start"); PUSH (Id "cur"); STORE]
+
+      |> append [
+        MALLOC;
+        BIND "foo";
+        PUSH (Val (Z 123));
+        PUSH (Id "foo");
+        STORE
+      ]
+
+      |> append [
+        PUSH (Val (Z 1));
+        PUSH (Id "start")
+      ]
+
+      |> append_n 256 (fun _ ->
+        [LOAD]
+      )
+
+      |> append [STORE; PUSH (Id "foo"); LOAD; PUT]
+    , (* Output *)
+      [123]
+    )
+
   ]
 
 
