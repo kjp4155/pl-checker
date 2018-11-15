@@ -558,6 +558,37 @@ let testcases : testcase list =
         ADD;
         PUT
       ]
+    ); RUN (
+
+  (* Location to be collected *)
+      [PUSH (Val (Z 1)); MALLOC; STORE]
+      |> append_n 126 (fun i -> 
+        let v = Printf.sprintf "x%d" i in [
+            MALLOC; 
+            BIND v; 
+            PUSH (Val (Z 1));
+            PUSH (Id v);
+            STORE;
+      ])
+      |> append [PUSH (Val (Z 500)); 
+        PUSH (Id "x0"); 
+        PUSH (Val (Z 10)); 
+        ADD; 
+        STORE;   (* Env : "x0" ==> (a, 0) / Mem : (a, 10) ==> 500 *)
+      ]
+  
+  (* Trigger GC *)
+      |> append [
+      MALLOC;
+      BIND "foo";
+      PUSH (Val (Z 1));
+      PUSH (Id "foo");
+      STORE
+      ]
+
+      |> append [PUSH (Id "x0"); PUSH (Val (Z 10)); ADD; LOAD; PUT]
+    , (* Output *)
+      [500]
     )
   ]
 
