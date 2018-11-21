@@ -101,12 +101,7 @@ and evalue_to_str indent ev =
   match ev with
   | Loc l -> loc_to_str l
   | Proc p -> proc_to_str indent p
-and env_to_str indent env =
-  let entry_to_str (x, ev) = 
-    Printf.sprintf "%s : %s" x (evalue_to_str indent ev)
-  in
-  indent ^ "[" ^ 
-  (String.concat (";\n" ^ indent) (List.map entry_to_str env)) ^ "]"
+and env_to_str indent env = ""
 
 let sval_to_str = function
   | V v -> val_to_str v
@@ -116,11 +111,7 @@ let sval_to_str = function
 let stack_to_str s =
   "[" ^ (String.concat ";\n" (List.map sval_to_str s)) ^ "]"
 
-let mem_to_str m =
-  let entry_to_str (l, v) =
-    Printf.sprintf "%s : %s" (loc_to_str l) (sval_to_str v)
-  in
-  String.concat "\n" (List.map entry_to_str m)
+let mem_to_str m = ""
 
 let lookup_env x e =
   try List.assoc x e with Not_found -> raise (Error ("Unbound name : " ^ x))
@@ -234,7 +225,8 @@ let rec run_helper (s, m, e, c) =
       let _ = print_newline() in
       let _ = print_endline "***** Memory *****" in
       let _ = print_endline (mem_to_str m) in
-      print_newline()
+      
+       print_newline()
     in
     run_helper (step (s, m, e, c))
 
