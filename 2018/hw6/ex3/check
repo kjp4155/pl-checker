@@ -33,7 +33,7 @@ do
 
     printf "Test %s..." "${TC}"
 
-    COMM="./run -resonly ${TFILE}.m > ${TFILE}.out"
+    COMM="./run ${TFILE}.m > ${TFILE}.out"
     if [ -f "${TFILE}.in" ]
     then
         COMM="${COMM} < ${TFILE}.in"
