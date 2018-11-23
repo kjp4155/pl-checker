@@ -3,7 +3,7 @@ all: run
 run: m.cmo error.cmo lexer.cmo parser.cmo main.cmo
 	ocamlc -o run m.cmo error.cmo lexer.cmo parser.cmo pp.cmo main.cmo
 
-error.cmo : error.ml m.cmo 
+error.cmo : error.ml m.cmo
 	ocamlc -c error.ml
 
 m.cmo : m.ml
@@ -34,4 +34,4 @@ lexer.ml: lexer.mll parser.cmo m.cmo
 	ocamllex lexer.mll
 
 clean:
-	rm -f *.cmx *.cmi parser.mli parser.ml lexer.ml run *.o *.cmo
+	rm -f *.cmx *.cmi parser.mli parser.ml lexer.ml run *.o *.cmo examples/*.{out,err}

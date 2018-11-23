@@ -6,6 +6,7 @@ ex*.ml
 *.pdf
 *.swp
 *.out
+*.err
 .vscode
 hw8
 .DS_Store
