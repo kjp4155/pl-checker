@@ -8,7 +8,7 @@
 - `examples/test<num>.k--` : 테스트케이스 (k-- 버전)
 - `examples/test<num>.in`  : (입력이 필요한 경우만) 입력
 - `examples/test<num>.ans` : 정답
-- `examples/test<num>.out` : 출력
+- `examples/test<num>.out` : 내 출력
 
 **hard testcase**
 
@@ -33,4 +33,12 @@ k--를 번역하지 않고 직접 임의로 작성한 sm5 코드입니다. 점�
 - `examples/test<num>.m`   : 테스트케이스
 - `examples/test<num>.in`  : (입력이 필요한 경우만) 입력
 - `examples/test<num>.ans` : 정답
-- `examples/test<num>.out` : 출력
+- `examples/test<num>.out` : 내 출력
+
+### 6-4 : LowFat M (`ex4/`)
+1. 구현한 `simple_checker.ml`을 복사하거나 뼈대코드 `simple_checker.orig.ml`을 `simple_checker.ml`로 바꾼 후 구현합니다.
+2. `./check` 명령어를 통해 테스트케이스를 실행합니다.
+
+- `examples/<test>.m`   : 테스트케이스
+- `examples/<test>.ans` : 정답
+- `examples/<test>.out` : 내 출력
