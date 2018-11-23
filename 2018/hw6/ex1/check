@@ -1,12 +1,17 @@
 #!/bin/bash
 
-TESTCASES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38)
-HARDTESTCASES=(1)
-TESTDIR="examples"
-WRONG="$(tput setaf 1)✗$(tput sgr0)"
-CORRECT="$(tput setaf 2)✓$(tput sgr0)"
-WARNING="$(tput setaf 3)⚠$(tput sgr0)"
+R=$(tput setaf 1)
+G=$(tput setaf 2)
+Y=$(tput setaf 3)
+N=$(tput sgr0)
+BOLD=$(tput bold)
 
+WRONG="${R}✗ Wrong$N"
+CORRECT="${G}✓ Correct$N"
+WARNING="${Y}⚠$N"
+
+TESTDIR="examples"
+HARD_TESTDIR="hard_examples"
 
 function result {
     if [ 0 -lt "$1"  ]
@@ -17,61 +22,65 @@ function result {
     fi
 }
 
-echo '# Compiling...'
-if ! make
-then
-    echo ''
-    echo 'Compile fail.'
-    exit 1
-fi
-echo ''
+set -e
 
-echo '# Testing Rozetta: K-- -> Sm5 -> Sonata'
+echo "-- Compile sources --"
+make
+echo ""
 
-for TC in "${TESTCASES[@]}"
+echo '-- Testing Rozetta: K-- -> Sm5 -> Sonata --'
+for FULLNAME in $(find "$TESTDIR"/*.sm5 | sort -V)
 do
-    TFILE="${TESTDIR}/test${TC}"
-    printf "Test %s..." "${TC}"
-    COMM="./run ${TFILE}.sm5 > ${TFILE}.out"
-    COMMSM5="./run -sm5 ${TFILE}.sm5 > ${TFILE}.ans"
-    if [ -f "${TFILE}.in" ]
+    TEST="$(basename -- "$FULLNAME" .sm5)"
+    FILE="$TESTDIR/$TEST"
+
+    printf "${BOLD}Testcase: %s$N " "$TEST"
+
+    COMM="./run $FILE.sm5 > $FILE.out 2> $FILE.err"
+    COMMSM5="./run -sm5 $FILE.sm5 > $FILE.ans"
+    if [ -f "$FILE.in" ]
     then
-        COMM="${COMM} < ${TFILE}.in"
-        COMMSM5="${COMMSM5} < ${TFILE}.in"
+        COMM="$COMM < $FILE.in"
+        COMMSM5="$COMMSM5 < $FILE.in"
     fi
 
-    eval "${COMMSM5}"
+    eval "$COMMSM5"
 
-    if eval "${COMM}"
+    if eval "$COMM"
     then
-        eval "diff ${TFILE}.ans ${TFILE}.out > /dev/null"
+        eval "diff $FILE.ans $FILE.out > /dev/null"
         result $?
     else
-        echo "${WRONG}"
+        echo "$WRONG"
+        cat "$FILE.err"
     fi
 done
 
-echo "# Testing Rozetta: Sm5 -> Sonata (${WARNING} HARD)"
-
-for TC in "${HARDTESTCASES[@]}"
+echo ""
+echo "-- Testing Rozetta: Sm5 -> Sonata (${WARNING} HARD) --"
+for FULLNAME in $(find "$HARD_TESTDIR"/*.sm5 | sort -V)
 do
-    TFILE="${TESTDIR}/test_hard${TC}"
-    printf "Test %s..." "${TC}"
-    COMM="./run ${TFILE}.sm5 > ${TFILE}.out"
-    COMMSM5="./run -sm5 ${TFILE}.sm5 > ${TFILE}.ans"
-    if [ -f "${TFILE}.in" ]
+    TEST="$(basename -- "$FULLNAME" .sm5)"
+    FILE="$HARD_TESTDIR/$TEST"
+
+    printf "${BOLD}Testcase: %s$N " "$TEST"
+
+    COMM="./run $FILE.sm5 > $FILE.out 2> $FILE.err"
+    COMMSM5="./run -sm5 $FILE.sm5 > $FILE.ans"
+    if [ -f "$FILE.in" ]
     then
-        COMM="${COMM} < ${TFILE}.in"
-        COMMSM5="${COMMSM5} < ${TFILE}.in"
+        COMM="${COMM} < $FILE.in"
+        COMMSM5="${COMMSM5} < $FILE.in"
     fi
 
-    eval "${COMMSM5}"
+    eval "$COMMSM5"
 
-    if eval "${COMM}"
+    if eval "$COMM"
     then
-        eval "diff ${TFILE}.ans ${TFILE}.out > /dev/null"
+        eval "diff $FILE.ans $FILE.out > /dev/null"
         result $?
     else
-        echo "${WRONG}"
+        echo "$WRONG"
+        cat "$FILE.err"
     fi
 done
