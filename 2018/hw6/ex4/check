@@ -12,26 +12,21 @@ WARNING="${Y}⚠$N"
 
 TESTDIR="examples"
 
+set -e
 
-echo '-- Compile sources --'
-if ! make
-then
-    echo ''
-    echo 'Compile fail.'
-    exit 1
-fi
-echo ''
+echo "-- Compile sources --"
+make
+echo ""
 
-echo '-- Testing Lowfat M --'
-
-for FULLNAME in "$TESTDIR"/*.m
+echo "-- Testing Lowfat M --"
+for FULLNAME in $(find "$TESTDIR"/*.m | sort -V)
 do
     TEST="$(basename -- "$FULLNAME" .m)"
     FILE="$TESTDIR/$TEST"
 
     printf "${BOLD}Testcase: %s$N " "$TEST"
 
-    COMM="./run -resonly $FILE.m > $FILE.out"
+    COMM="./run -resonly $FILE.m > $FILE.out 2> $FILE.err"
     if [ -f "$FILE.in" ]
     then
         COMM="$COMM < $FILE.in"
@@ -52,6 +47,6 @@ do
         fi
     else
         echo "$WRONG"
+        cat "$FILE.err"
     fi
 done
-
