@@ -1,1 +1,5 @@
 simple_checker.ml
+run
+lexer.ml
+parser.ml
+parser.mli
