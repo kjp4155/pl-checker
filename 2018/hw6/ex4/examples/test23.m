@@ -1,0 +1,1 @@
+let rec f = fn x => (0, ((true, (("a", ((malloc 0, ((malloc true, ((malloc "a", ((malloc fn x => x + x, (f x, malloc fn x => x - x)), malloc "b")), malloc false)), malloc 1)), "b")), false)), 1)) in f end
