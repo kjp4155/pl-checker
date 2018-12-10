@@ -1,0 +1,44 @@
+#!/bin/bash
+
+R=$(tput setaf 1)
+G=$(tput setaf 2)
+Y=$(tput setaf 3)
+N=$(tput sgr0)
+BOLD=$(tput bold)
+
+WRONG="${R}✗ Wrong$N"
+CORRECT="${G}✓ Correct$N"
+WARNING="${Y}⚠$N"
+
+TESTDIR="examples"
+
+set -e
+
+echo "-- Compile sources --"
+make
+echo ""
+
+echo "-- Testing Exception is Sugar --"
+for FULLNAME in $(find "$TESTDIR"/*.xexp | sort -V)
+do
+    TEST="$(basename -- "$FULLNAME" .xexp)"
+    FILE="$TESTDIR/$TEST"
+
+    printf "${BOLD}Testcase: %s$N " "$TEST"
+
+    COMM="./run -resonly $FILE.xexp > $FILE.out 2> $FILE.err"
+    if [ -f "$FILE.in" ]
+    then
+        COMM="$COMM < $FILE.in"
+    fi
+
+    if eval "$COMM"
+    then
+        echo "$CORRECT"
+    else
+        echo "$WRONG"
+        cat "$FILE.out"
+        cat "$FILE.err"
+        echo ""
+    fi
+done
